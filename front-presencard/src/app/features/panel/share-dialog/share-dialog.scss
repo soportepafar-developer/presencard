@@ -1,0 +1,54 @@
+.person {
+  display: grid;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: var(--blue-50);
+
+  span {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+}
+
+.url-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  .input {
+    flex: 1 1 14rem;
+    min-width: 0;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.qr {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  text-align: center;
+
+  h3 {
+    font-size: 0.9375rem;
+  }
+
+  .hint {
+    max-width: 22rem;
+  }
+}
+
+/* El borde fino ayuda a ver dónde termina la zona blanca de silencio del QR sobre fondos claros. */
+.qr-box {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}

@@ -1,0 +1,135 @@
+<div class="page">
+  @switch (status()) {
+    @case ('ready') {
+      @if (card(); as c) {
+        @if (links(); as l) {
+          <header class="hero">
+            <span class="brand">Presencard</span>
+          </header>
+
+          <main class="body">
+            <div class="avatar" aria-hidden="true">{{ initials() }}</div>
+            <h1>{{ c.fullName }}</h1>
+            @if (c.jobTitle) {
+              <p class="role">{{ c.jobTitle }}</p>
+            }
+            @if (c.company) {
+              <p class="company">{{ c.company }}</p>
+            }
+
+            @if (l.whatsapp || l.tel || l.mailto || l.instagram || l.telegram) {
+              <nav class="quick" aria-label="Acciones de contacto">
+                @if (l.whatsapp) {
+                  <a class="qa whatsapp" [href]="l.whatsapp" target="_blank" rel="noopener">
+                    <span class="qa-icon"><app-icon name="whatsapp" /></span>
+                    <span>WhatsApp</span>
+                  </a>
+                }
+                @if (l.tel) {
+                  <a class="qa" [href]="l.tel">
+                    <span class="qa-icon"><app-icon name="phone" /></span>
+                    <span>Llamar</span>
+                  </a>
+                }
+                @if (l.mailto) {
+                  <a class="qa" [href]="l.mailto">
+                    <span class="qa-icon"><app-icon name="mail" /></span>
+                    <span>Correo</span>
+                  </a>
+                }
+                @if (l.instagram) {
+                  <a class="qa" [href]="l.instagram" target="_blank" rel="noopener">
+                    <span class="qa-icon"><app-icon name="instagram" /></span>
+                    <span>Instagram</span>
+                  </a>
+                }
+                @if (l.telegram) {
+                  <a class="qa" [href]="l.telegram" target="_blank" rel="noopener">
+                    <span class="qa-icon"><app-icon name="telegram" /></span>
+                    <span>Telegram</span>
+                  </a>
+                }
+              </nav>
+
+              <ul class="details">
+                @if (l.mailto) {
+                  <li>
+                    <a [href]="l.mailto">
+                      <span class="chip"><app-icon name="mail" /></span>
+                      <span class="text"><small>Correo electrónico</small><strong>{{ c.email }}</strong></span>
+                    </a>
+                  </li>
+                }
+                @if (l.tel) {
+                  <li>
+                    <a [href]="l.tel">
+                      <span class="chip"><app-icon name="phone" /></span>
+                      <span class="text"><small>Teléfono</small><strong>{{ c.phone }}</strong></span>
+                    </a>
+                  </li>
+                }
+                @if (l.whatsapp) {
+                  <li>
+                    <a [href]="l.whatsapp" target="_blank" rel="noopener">
+                      <span class="chip"><app-icon name="whatsapp" /></span>
+                      <span class="text"><small>WhatsApp</small><strong>+{{ c.whatsapp }}</strong></span>
+                    </a>
+                  </li>
+                }
+                @if (l.instagram) {
+                  <li>
+                    <a [href]="l.instagram" target="_blank" rel="noopener">
+                      <span class="chip"><app-icon name="instagram" /></span>
+                      <span class="text"><small>Instagram</small><strong>&#64;{{ c.instagram }}</strong></span>
+                    </a>
+                  </li>
+                }
+                @if (l.telegram) {
+                  <li>
+                    <a [href]="l.telegram" target="_blank" rel="noopener">
+                      <span class="chip"><app-icon name="telegram" /></span>
+                      <span class="text"><small>Telegram</small><strong>&#64;{{ c.telegram }}</strong></span>
+                    </a>
+                  </li>
+                }
+              </ul>
+            }
+
+            <a class="btn btn-ghost save" [href]="l.vcard" download>
+              <app-icon name="download" /> Guardar contacto
+            </a>
+
+            <a class="universe" [href]="c.universoSolucionesUrl" target="_blank" rel="noopener">
+              <span class="universe-icon"><app-icon name="compass" /></span>
+              <span class="universe-text">
+                <strong>Universo de Soluciones</strong>
+                <span>Conoce todo lo que podemos hacer por ti</span>
+              </span>
+              <app-icon name="arrow-right" />
+            </a>
+          </main>
+
+          <footer>Tarjeta digital · Presencard</footer>
+        }
+      }
+    }
+    @case ('notFound') {
+      <main class="state">
+        <span class="state-icon"><app-icon name="alert" /></span>
+        <h1>Tarjeta no encontrada</h1>
+        <p>El enlace no existe o la tarjeta fue eliminada.</p>
+      </main>
+    }
+    @case ('error') {
+      <main class="state">
+        <span class="state-icon"><app-icon name="alert" /></span>
+        <h1>No pudimos cargar la tarjeta</h1>
+        <p>Revisa tu conexión e inténtalo de nuevo.</p>
+        <button type="button" class="btn btn-primary" (click)="load()">Reintentar</button>
+      </main>
+    }
+    @default {
+      <p class="loading" role="status">Cargando tarjeta…</p>
+    }
+  }
+</div>

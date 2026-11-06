@@ -1,0 +1,80 @@
+:host {
+  display: grid;
+  gap: 1rem;
+  max-width: 48rem;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  justify-self: start;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+.loading {
+  padding: 2rem 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+form {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.25rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
+/* El campo de contraseña lleva botones al lado: necesita todo el ancho para no quedar angosto. */
+app-password-field {
+  grid-column: 1 / -1;
+}
+
+.note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: var(--blue-50);
+  color: var(--blue-700);
+  font-size: 0.9375rem;
+
+  > span {
+    flex: 1 1 14rem;
+    min-width: 0;
+  }
+
+  .btn {
+    min-height: 36px;
+    margin-left: auto;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  form {
+    padding: 1.75rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

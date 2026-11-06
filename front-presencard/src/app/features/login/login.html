@@ -1,0 +1,52 @@
+<main class="screen">
+  <section class="brand" aria-hidden="true">
+    <span class="logo">P</span>
+    <p class="brand-name">Presencard</p>
+    <p class="brand-tag">Tarjetas de presentación digitales para tu equipo.</p>
+  </section>
+
+  <section class="panel surface">
+    <h1>Ingresar</h1>
+    <p class="subtitle">Accede a tu panel de tarjetas.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      @if (error()) {
+        <p class="alert alert-error" role="alert"><app-icon name="alert" />{{ error() }}</p>
+      }
+
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input
+          id="email"
+          type="email"
+          class="input"
+          formControlName="email"
+          autocomplete="username"
+          [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid"
+        />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <span class="field-error">Ingresa un correo válido.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          class="input"
+          formControlName="password"
+          autocomplete="current-password"
+          [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid"
+        />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <span class="field-error">Ingresa tu contraseña.</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+        {{ submitting() ? 'Ingresando…' : 'Ingresar' }}
+      </button>
+    </form>
+  </section>
+</main>

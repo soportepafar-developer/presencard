@@ -1,0 +1,20 @@
+# Prueba de la entrega en un Apache real, bajo /presencard (http://localhost:8091/presencard).
+# presencard.zip se extrae TAL CUAL dentro de la raíz web, igual que en public_html de cPanel.
+services:
+  web:
+    build:
+      context: .
+      args:
+        PHP_TAG: ${PHP_TAG:-7.4-apache}
+    ports:
+      - "8091:80"
+    volumes:
+      - ./site:/var/www/html
+    networks:
+      - default
+      - desarrollo
+
+networks:
+  desarrollo:
+    external: true
+    name: presencard_default

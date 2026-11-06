@@ -1,0 +1,81 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+parameters:
+    # Valores por defecto de desarrollo; en producción se sobreescriben en .env.local.
+    env(SPA_INDEX_RELATIVE): 'public/app/index.html'
+    env(APP_COOKIE_PATH): '/'
+    # Imagen de la vista previa de WhatsApp/redes, relativa a APP_PUBLIC_URL (vacío = sin imagen). Ej.: /app/og-image.png
+    env(APP_OG_IMAGE): ''
+    app.public_url: '%env(APP_PUBLIC_URL)%'
+    # Ruta del index.html compilado de Angular, relativa a la carpeta del backend (en cPanel está en public_html).
+    app.spa_index_path: '%kernel.project_dir%/%env(SPA_INDEX_RELATIVE)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Todo src/ es autoregistrado, salvo dominio y DTO/comandos (no son servicios).
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Kernel.php'
+            - '../src/*/Domain/'
+            - '../src/Presencard/Application/Actor.php'
+            - '../src/Presencard/Application/PresencardView.php'
+            - '../src/Presencard/Application/PresencardPage.php'
+            - '../src/Presencard/Application/Create/CreatePresencardCommand.php'
+            - '../src/Presencard/Application/Update/UpdatePresencardCommand.php'
+            - '../src/User/Application/UserView.php'
+            - '../src/User/Application/UserPage.php'
+            - '../src/User/Application/Create/CreateUserCommand.php'
+            - '../src/User/Application/Update/UpdateUserCommand.php'
+
+    # Controladores (adaptadores primarios)
+    App\Presencard\Infrastructure\Http\:
+        resource: '../src/Presencard/Infrastructure/Http/'
+        exclude: '../src/Presencard/Infrastructure/Http/{Seo,VCard,*Presenter.php,PublicUrlBuilder.php,ActorResolver.php}'
+        tags: ['controller.service_arguments']
+        bind:
+            string $ogImagePath: '%env(APP_OG_IMAGE)%'
+
+    App\User\Infrastructure\Http\:
+        resource: '../src/User/Infrastructure/Http/'
+        tags: ['controller.service_arguments']
+
+    # Puertos -> adaptadores
+    App\Presencard\Domain\PresencardRepository:
+        alias: App\Presencard\Infrastructure\Persistence\Doctrine\DoctrinePresencardRepository
+
+    App\Presencard\Application\Port\HashGenerator:
+        alias: App\Presencard\Infrastructure\Hash\RandomHashGenerator
+
+    App\Presencard\Application\Port\OwnerDirectory:
+        alias: App\Presencard\Infrastructure\Owner\UserOwnerDirectory
+
+    App\User\Domain\UserRepository:
+        alias: App\User\Infrastructure\Persistence\Doctrine\DoctrineUserRepository
+
+    App\User\Application\Port\PasswordHasher:
+        alias: App\User\Infrastructure\Security\SymfonyPasswordHasher
+
+    App\User\Application\Port\CardOwnershipTransfer:
+        alias: App\User\Infrastructure\Card\PresencardOwnershipTransfer
+
+    # Contadores del límite de intentos de login: carpeta propia, a salvo de "vaciar var/cache".
+    app.cache.login_throttle:
+        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
+        arguments: ['login', 0, '%kernel.project_dir%/var/throttle']
+
+    App\User\Infrastructure\Security\LoginAttemptLimiter:
+        arguments:
+            $cache: '@app.cache.login_throttle'
+
+    App\Presencard\Infrastructure\Http\PublicUrlBuilder:
+        arguments:
+            $publicUrl: '%app.public_url%'
+
+    App\Presencard\Infrastructure\Http\Seo\SpaShellRenderer:
+        arguments:
+            $indexHtmlPath: '%app.spa_index_path%'

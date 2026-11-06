@@ -1,0 +1,342 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: linear-gradient(180deg, var(--blue-50), var(--white));
+}
+
+.page {
+  position: relative;
+  max-width: 30rem;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--white);
+}
+
+/* Cabecera azul con curva inferior y círculos decorativos */
+.hero {
+  position: relative;
+  height: 10.5rem;
+  overflow: hidden;
+  background: linear-gradient(150deg, var(--blue), var(--blue-700));
+  border-radius: 0 0 50% 50% / 0 0 2.25rem 2.25rem;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  &::before {
+    top: -4rem;
+    right: -3rem;
+    width: 13rem;
+    height: 13rem;
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  &::after {
+    bottom: -3.5rem;
+    left: -2rem;
+    width: 9rem;
+    height: 9rem;
+    background: var(--green);
+    opacity: 0.45;
+  }
+}
+
+.brand {
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding: 1.1rem 1.25rem;
+  color: var(--on-blue);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.body {
+  /* Posicionado para que el avatar (que sube sobre la cabecera) se pinte por encima de ella también en Safari/iOS */
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 0 1.25rem 1rem;
+  animation: rise 0.45s ease-out both;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 7rem;
+  height: 7rem;
+  position: relative;
+  z-index: 2;
+  margin-top: -3.5rem;
+  border: 4px solid var(--white);
+  border-radius: 50%;
+  background: var(--blue-50);
+  color: var(--blue-ink);
+  font-size: 2.25rem;
+  font-weight: 800;
+  box-shadow: 0 0 0 5px var(--green), 0 14px 30px rgba(27, 31, 59, 0.2);
+}
+
+h1 {
+  margin-top: 0.75rem;
+  font-size: 1.625rem;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.role {
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: var(--blue-50);
+  color: var(--blue-ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Acciones rápidas */
+.company {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* Botón de descarga del contacto (.vcf) */
+.save {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 0.75rem;
+  border-color: var(--blue-100);
+  font-size: 1rem;
+}
+
+/* Acciones rápidas */
+.quick {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.qa {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0;
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.qa-icon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--blue-50);
+  color: var(--blue-ink);
+  transition: transform 0.15s, background-color 0.15s;
+  --icon-size: 1.5rem;
+}
+
+.qa:hover .qa-icon,
+.qa:focus-visible .qa-icon {
+  transform: translateY(-2px);
+  background: var(--blue-100);
+}
+
+.whatsapp .qa-icon {
+  background: var(--green);
+  color: var(--on-green);
+}
+
+.whatsapp:hover .qa-icon,
+.whatsapp:focus-visible .qa-icon {
+  background: var(--green-700);
+}
+
+/* Detalle de contacto */
+.details {
+  width: 100%;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+
+  li + li {
+    border-top: 1px solid var(--line);
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.8rem 0.25rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a:hover strong,
+  a:focus-visible strong {
+    color: var(--blue-ink);
+  }
+}
+
+.chip {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
+  background: var(--blue-50);
+  color: var(--blue-ink);
+}
+
+.text {
+  display: grid;
+  min-width: 0;
+
+  small {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  strong {
+    font-size: 0.9688rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Enlace permanente a Universo de Soluciones */
+.universe {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: linear-gradient(120deg, var(--green), var(--green-700));
+  color: var(--on-green);
+  text-decoration: none;
+  box-shadow: 0 10px 24px var(--accent-glow);
+  transition: transform 0.15s, box-shadow 0.15s;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px var(--accent-glow);
+  }
+}
+
+.universe-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.2);
+  --icon-size: 1.5rem;
+}
+
+.universe-text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+
+  strong {
+    font-size: 1.0625rem;
+  }
+
+  span {
+    font-size: 0.875rem;
+  }
+}
+
+footer {
+  /* Deja espacio para la barra inferior de Safari/iOS */
+  padding: 1rem 1.25rem calc(1.75rem + env(safe-area-inset-bottom));
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* Estados: cargando / no encontrada / error */
+.state {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 6rem 1.5rem;
+  text-align: center;
+
+  p {
+    color: var(--muted);
+  }
+}
+
+.state-icon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--blue-50);
+  color: var(--blue-ink);
+  --icon-size: 2rem;
+}
+
+.loading {
+  padding: 6rem 1.5rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body {
+    animation: none;
+  }
+
+  .qa-icon,
+  .universe {
+    transition: none;
+  }
+}
+
+/* En pantallas grandes se presenta como una tarjeta centrada */
+@media (min-width: 520px) {
+  :host {
+    padding: 2rem 1rem;
+  }
+
+  .page {
+    min-height: 0;
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(50, 64, 165, 0.18);
+  }
+}

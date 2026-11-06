@@ -1,0 +1,24 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
+
+        # La versión del servidor se define en DATABASE_URL (?serverVersion=...)
+        use_savepoints: true
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: false
+        # Mapeo en XML dentro de Infrastructure: las entidades del dominio no conocen a Doctrine.
+        mappings:
+            Presencard:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Presencard/Infrastructure/Persistence/Doctrine/mapping'
+                prefix: 'App\Presencard\Domain'
+                alias: Presencard
+            User:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/User/Infrastructure/Persistence/Doctrine/mapping'
+                prefix: 'App\User\Domain'
+                alias: User

@@ -1,0 +1,11 @@
+presencard_http:
+    resource: ../../src/Presencard/Infrastructure/Http/
+    type: annotation
+
+user_http:
+    resource: ../../src/User/Infrastructure/Http/
+    type: annotation
+
+kernel:
+    resource: ../../src/Kernel.php
+    type: annotation

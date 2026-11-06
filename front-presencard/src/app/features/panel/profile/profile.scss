@@ -1,0 +1,81 @@
+:host {
+  display: grid;
+  gap: 1rem;
+  max-width: 56rem;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: var(--blue-50);
+  color: var(--blue);
+  font-size: 1.5rem;
+  font-weight: 800;
+  border: 3px solid var(--green);
+}
+
+.who {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+
+  h1 {
+    font-size: 1.375rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+.email {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.columns {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
+.card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+h2 {
+  font-size: 1.0625rem;
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (min-width: 840px) {
+  .columns {
+    grid-template-columns: 1fr 1fr;
+  }
+}

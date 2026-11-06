@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Imagen de vista previa de Presencard (1200x630)</title>
+<style>
+  /* Fuente de front-presencard/public/og-image.png. Para regenerarla: scripts/og-image/generate.sh */
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    color: #fff;
+    background: linear-gradient(150deg, #3240a5 0%, #252f80 100%);
+  }
+  .circle { position: absolute; border-radius: 50%; }
+  .c1 { width: 520px; height: 520px; right: -140px; top: -190px; background: rgba(255, 255, 255, .09); }
+  .c2 { width: 360px; height: 360px; left: -110px; bottom: -150px; background: rgba(0, 141, 54, .55); }
+  .content { position: absolute; inset: 0; display: flex; align-items: center; padding: 0 110px; gap: 64px; }
+  .logo {
+    flex: none; width: 220px; height: 220px; border-radius: 56px; background: #fff; color: #3240a5;
+    display: grid; place-items: center; font-size: 150px; font-weight: 800;
+    border-bottom: 18px solid #008d36; box-shadow: 0 24px 60px rgba(0, 0, 0, .28);
+  }
+  h1 { margin: 0; font-size: 112px; line-height: 1.05; font-weight: 800; letter-spacing: -2px; }
+  p { margin: 18px 0 0; font-size: 44px; font-weight: 500; opacity: .92; }
+  .bar { margin-top: 34px; width: 150px; height: 10px; border-radius: 6px; background: #008d36; }
+</style>
+</head>
+<body>
+  <div class="circle c1"></div>
+  <div class="circle c2"></div>
+  <div class="content">
+    <div class="logo">P</div>
+    <div>
+      <h1>Presencard</h1>
+      <p>Tu tarjeta de presentación digital</p>
+      <div class="bar"></div>
+    </div>
+  </div>
+</body>
+</html>

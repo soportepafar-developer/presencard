@@ -1,0 +1,14 @@
+# Archivos de la aplicación Angular. Los que llevan un hash en el nombre (main-XXXX.js, chunk-XXXX.js...)
+# cambian de nombre en cada versión, así que el navegador puede guardarlos un año.
+<IfModule mod_headers.c>
+    <FilesMatch "^(main|chunk|polyfills|styles)-[A-Z0-9]+\.(js|css)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# Nunca servir archivos ocultos
+<IfModule mod_authz_core.c>
+    <FilesMatch "^\.(?!htaccess$)">
+        Require all denied
+    </FilesMatch>
+</IfModule>

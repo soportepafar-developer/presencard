@@ -1,0 +1,1 @@
+import{tb as r}from"./chunk-UR2CBCVI.js";var t="/api";function i(n,o="Ocurri\xF3 un error inesperado. Int\xE9ntalo de nuevo."){if(n instanceof r){let e=n.error?.message;if(typeof e=="string"&&e!=="")return e;if(n.status===0)return"No se pudo conectar con el servidor."}return o}export{t as a,i as b};

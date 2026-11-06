@@ -1,0 +1,86 @@
+<a class="back" routerLink="/panel/users"><app-icon name="chevron-left" /> Volver a usuarios</a>
+
+<h1>{{ isEdit ? 'Editar usuario' : 'Nuevo usuario' }}</h1>
+
+@if (loadError(); as message) {
+  <p class="alert alert-error" role="alert"><app-icon name="alert" />{{ message }}</p>
+} @else if (loading()) {
+  <p class="loading" role="status">Cargando…</p>
+} @else {
+  @if (flash(); as message) {
+    <p class="alert alert-success" role="status"><app-icon name="check" />{{ message }}</p>
+  }
+
+  <form class="surface" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    @if (error(); as message) {
+      <p class="alert alert-error full" role="alert"><app-icon name="alert" />{{ message }}</p>
+    }
+
+    <div class="grid">
+      <div class="field">
+        <label for="fullName">Nombre completo *</label>
+        <input id="fullName" class="input" formControlName="fullName" autocomplete="off" [class.is-invalid]="invalid(form.controls.fullName)" />
+        @if (invalid(form.controls.fullName)) {
+          <span class="field-error">Ingresa el nombre (máx. 150 caracteres).</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="email">Correo electrónico *</label>
+        <input id="email" type="email" class="input" formControlName="email" autocomplete="off" [class.is-invalid]="invalid(form.controls.email)" />
+        @if (invalid(form.controls.email)) {
+          <span class="field-error">Ingresa un correo válido.</span>
+        } @else {
+          <span class="hint">Es el usuario con el que inicia sesión.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="role">Rol *</label>
+        <select id="role" class="input" formControlName="role">
+          @for (role of roles; track role.value) {
+            <option [value]="role.value">{{ role.label }}</option>
+          }
+        </select>
+        @if (isSelf()) {
+          <span class="hint">No puedes cambiar tu propio rol.</span>
+        } @else {
+          <span class="hint">Los administradores gestionan usuarios y ven todas las tarjetas; los usuarios solo gestionan las suyas.</span>
+        }
+      </div>
+
+      @if (!isEdit) {
+        <app-password-field
+          inputId="password"
+          label="Contraseña inicial *"
+          [control]="password"
+          [generator]="true"
+          [invalid]="invalid(password)"
+        >
+          @if (invalid(password)) {
+            <span class="field-error">Debe tener entre 8 y 72 caracteres.</span>
+          } @else {
+            <span class="hint">Entrégasela al usuario; podrá cambiarla desde su perfil.</span>
+          }
+        </app-password-field>
+      }
+    </div>
+
+    @if (editing(); as user) {
+      <p class="note">
+        <app-icon name="key" />
+        <span>¿El usuario olvidó su contraseña? Asígnale una nueva.</span>
+        <button type="button" class="btn btn-ghost" (click)="resetting.set(user)">Restablecer contraseña</button>
+      </p>
+    }
+
+    <div class="actions">
+      <a class="btn btn-ghost" routerLink="/panel/users">Cancelar</a>
+      <button type="submit" class="btn btn-success" [disabled]="saving()">
+        {{ saving() ? 'Guardando…' : isEdit ? 'Guardar cambios' : 'Crear usuario' }}
+      </button>
+    </div>
+  </form>
+}
+
+<app-reset-password-dialog [user]="resetting()" (closed)="resetting.set(null)" (done)="passwordReset($event)" />

@@ -1,0 +1,39 @@
+security:
+    # bcrypt explícito: portable entre el Docker de desarrollo y cualquier PHP de cPanel
+    # (con "auto" el algoritmo depende de si el servidor tiene sodium/argon2).
+    encoders:
+        App\User\Infrastructure\Security\SecurityUser:
+            algorithm: bcrypt
+            cost: 12
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+
+    providers:
+        app_users:
+            id: App\User\Infrastructure\Security\SecurityUserProvider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            lazy: true
+            provider: app_users
+            user_checker: App\User\Infrastructure\Security\ActiveUserChecker
+            # Sin sesión válida la API responde 401 JSON (no redirige a un login HTML).
+            entry_point: App\User\Infrastructure\Security\ApiAuthenticationEntryPoint
+            json_login:
+                check_path: api_login
+                username_path: email
+                password_path: password
+                failure_handler: App\User\Infrastructure\Security\JsonLoginFailureHandler
+            logout:
+                path: api_logout
+
+    access_control:
+        # Gestión de usuarios: solo administradores. Tarjetas y perfil: cualquier usuario autenticado.
+        - { path: ^/api/users, roles: ROLE_ADMIN }
+        - { path: ^/api/cards, roles: ROLE_USER }
+        - { path: ^/api/me, roles: ROLE_USER }

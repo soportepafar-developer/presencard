@@ -1,0 +1,172 @@
+<a class="back" routerLink="/panel/cards"><app-icon name="chevron-left" /> Volver al listado</a>
+
+<h1>{{ isEdit ? 'Editar tarjeta' : 'Nueva tarjeta' }}</h1>
+
+@if (loadError(); as message) {
+  <p class="alert alert-error" role="alert"><app-icon name="alert" />{{ message }}</p>
+} @else if (loading()) {
+  <p class="loading" role="status">Cargando…</p>
+} @else {
+  <form class="surface" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    @if (error(); as message) {
+      <p class="alert alert-error full" role="alert"><app-icon name="alert" />{{ message }}</p>
+    }
+
+    <section class="group">
+      <h2>Datos personales</h2>
+
+      <div class="field">
+        <label for="fullName">Nombre completo *</label>
+        <input id="fullName" class="input" formControlName="fullName" autocomplete="off" [class.is-invalid]="invalid(form.controls.fullName)" />
+        @if (invalid(form.controls.fullName)) {
+          <span class="field-error">Ingresa el nombre completo (máx. 150 caracteres).</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="jobTitle">Cargo <span class="optional">(opcional)</span></label>
+        <input id="jobTitle" class="input" formControlName="jobTitle" autocomplete="off" [class.is-invalid]="invalid(form.controls.jobTitle)" />
+        @if (invalid(form.controls.jobTitle)) {
+          <span class="field-error">El cargo no puede superar 150 caracteres.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="company">Empresa <span class="optional">(opcional)</span></label>
+        <input id="company" class="input" formControlName="company" autocomplete="off" [class.is-invalid]="invalid(form.controls.company)" />
+        @if (invalid(form.controls.company)) {
+          <span class="field-error">La empresa no puede superar 150 caracteres.</span>
+        }
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Contacto</h2>
+
+      <div class="field">
+        <label for="email">Correo electrónico <span class="optional">(opcional)</span></label>
+        <input id="email" type="email" class="input" formControlName="email" autocomplete="off" [class.is-invalid]="invalid(form.controls.email)" />
+        @if (invalid(form.controls.email)) {
+          <span class="field-error">Ingresa un correo válido.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="phone">Teléfono <span class="optional">(opcional)</span></label>
+        <input id="phone" type="tel" class="input" formControlName="phone" autocomplete="off" [class.is-invalid]="invalid(form.controls.phone)" />
+        @if (invalid(form.controls.phone)) {
+          <span class="field-error">El teléfono no puede superar 30 caracteres.</span>
+        }
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Redes sociales</h2>
+
+      <div class="field">
+        <label for="whatsapp">WhatsApp</label>
+        <input id="whatsapp" type="tel" class="input" formControlName="whatsapp" placeholder="584123258691" autocomplete="off" [class.is-invalid]="invalid(form.controls.whatsapp)" />
+        @if (invalid(form.controls.whatsapp)) {
+          <span class="field-error">Debe tener entre 8 y 15 dígitos, incluyendo el código de país.</span>
+        } @else {
+          <span class="hint">Con código de país, sin el signo +.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="instagram">Instagram</label>
+        <input id="instagram" class="input" formControlName="instagram" placeholder="@usuario" autocomplete="off" [class.is-invalid]="invalid(form.controls.instagram)" />
+        @if (invalid(form.controls.instagram)) {
+          <span class="field-error">Usa el usuario (letras, números, punto o guion bajo) o el enlace del perfil.</span>
+        } @else {
+          <span class="hint">Usuario o enlace del perfil.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="telegram">Telegram</label>
+        <input id="telegram" class="input" formControlName="telegram" placeholder="@usuario" autocomplete="off" [class.is-invalid]="invalid(form.controls.telegram)" />
+        @if (invalid(form.controls.telegram)) {
+          <span class="field-error">Usa el usuario (5 a 32 letras, números o guion bajo) o el enlace t.me/usuario.</span>
+        } @else {
+          <span class="hint">Usuario o enlace t.me.</span>
+        }
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Colores de la tarjeta</h2>
+      <p class="hint">Elige una paleta sugerida o escribe los colores de la empresa (formato #RRGGBB).</p>
+
+      <div class="presets" role="group" aria-label="Paletas sugeridas">
+        @for (preset of presets; track preset.name) {
+          <button type="button" class="preset" [class.on]="isPreset(preset)" [attr.aria-pressed]="isPreset(preset)" (click)="applyPreset(preset)">
+            <span class="swatch" [style.background]="preset.primary"></span>
+            <span class="swatch" [style.background]="preset.accent"></span>
+            <span class="preset-name">{{ preset.name }}</span>
+          </button>
+        }
+      </div>
+
+      <div class="colors">
+        <div class="field">
+          <label for="colorPrimary">Color principal</label>
+          <div class="color-input">
+            <input type="color" class="picker" aria-label="Elegir color principal" [value]="pickerValue(form.controls.colorPrimary, '#3240A5')" (input)="setColor(form.controls.colorPrimary, $event)" />
+            <input id="colorPrimary" class="input" formControlName="colorPrimary" maxlength="7" spellcheck="false" autocomplete="off" [class.is-invalid]="invalid(form.controls.colorPrimary)" />
+          </div>
+          @if (invalid(form.controls.colorPrimary)) {
+            <span class="field-error">Usa el formato #RRGGBB, por ejemplo #3240A5.</span>
+          } @else {
+            <span class="hint">Cabecera, íconos y textos destacados.</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="colorAccent">Color de acento</label>
+          <div class="color-input">
+            <input type="color" class="picker" aria-label="Elegir color de acento" [value]="pickerValue(form.controls.colorAccent, '#008D36')" (input)="setColor(form.controls.colorAccent, $event)" />
+            <input id="colorAccent" class="input" formControlName="colorAccent" maxlength="7" spellcheck="false" autocomplete="off" [class.is-invalid]="invalid(form.controls.colorAccent)" />
+          </div>
+          @if (invalid(form.controls.colorAccent)) {
+            <span class="field-error">Usa el formato #RRGGBB, por ejemplo #008D36.</span>
+          } @else {
+            <span class="hint">Botón de WhatsApp, marco del avatar y bloque inferior.</span>
+          }
+        </div>
+      </div>
+
+      <div class="preview" [style]="previewStyle()" aria-hidden="true">
+        <div class="preview-hero"><span>Vista previa</span></div>
+        <div class="preview-body">
+          <span class="preview-avatar">AB</span>
+          <span class="preview-chip">Cargo</span>
+          <span class="preview-btn">WhatsApp</span>
+        </div>
+      </div>
+    </section>
+
+    @if (editing(); as card) {
+      <p class="note full">
+        <app-icon name="link" />
+        <span>Enlace de esta tarjeta (no cambia al editarla): <code>{{ card.publicUrl }}</code></span>
+        <button type="button" class="btn btn-ghost" (click)="sharing.set(true)">Ver enlace</button>
+      </p>
+    }
+
+    <div class="actions full">
+      <a class="btn btn-ghost" routerLink="/panel/cards">Cancelar</a>
+      <button type="submit" class="btn btn-success" [disabled]="saving()">
+        {{ saving() ? 'Guardando…' : isEdit ? 'Guardar cambios' : 'Crear tarjeta' }}
+      </button>
+    </div>
+  </form>
+}
+
+<app-share-dialog
+  heading="¡Tarjeta creada!"
+  [open]="created() !== null"
+  [card]="created()"
+  (closed)="closeCreated()"
+/>
+<app-share-dialog [open]="sharing()" [card]="editing()" (closed)="sharing.set(false)" />

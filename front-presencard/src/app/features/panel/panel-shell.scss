@@ -1,0 +1,156 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--blue);
+  color: var(--white);
+  box-shadow: 0 2px 12px rgba(27, 31, 59, 0.2);
+}
+
+/* Móvil: marca y sesión arriba, secciones en una segunda fila. Escritorio: todo en una fila. */
+.topbar-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'brand session'
+    'nav nav';
+  align-items: center;
+  gap: 0.25rem 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0.6rem 1rem 0;
+}
+
+.brand {
+  grid-area: brand;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  justify-self: start;
+  color: inherit;
+  font-weight: 700;
+  font-size: 1.125rem;
+  text-decoration: none;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--blue);
+  font-weight: 800;
+  border-bottom: 4px solid var(--green);
+}
+
+.nav {
+  grid-area: nav;
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 3px solid transparent;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+      color: var(--white);
+    }
+
+    &.active {
+      border-bottom-color: var(--green);
+      color: var(--white);
+    }
+  }
+}
+
+.session {
+  grid-area: session;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.me {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.2rem 0.5rem 0.2rem 0.2rem;
+  border-radius: 999px;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &.active {
+    background: rgba(255, 255, 255, 0.16);
+  }
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--blue);
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: 2px solid var(--green);
+}
+
+.who {
+  display: none;
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.9375rem;
+}
+
+.btn {
+  min-height: 40px;
+  padding: 0 0.8rem;
+}
+
+.label {
+  display: none;
+}
+
+.content {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+}
+
+@media (min-width: 640px) {
+  .who,
+  .label {
+    display: inline;
+  }
+}
+
+@media (min-width: 900px) {
+  .topbar-inner {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 'brand nav session';
+    padding-bottom: 0;
+  }
+
+  .nav {
+    margin-left: 1rem;
+    align-self: stretch;
+  }
+}

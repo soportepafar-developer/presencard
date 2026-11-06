@@ -1,0 +1,9 @@
+# El código y los archivos internos de Presencard NUNCA deben servirse por internet.
+# (La aplicación los lee desde el servidor; el navegador no necesita pedirlos.)
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

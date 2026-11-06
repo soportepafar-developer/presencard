@@ -1,0 +1,112 @@
+<header class="head">
+  <div>
+    <h1>Usuarios</h1>
+    @if (page(); as data) {
+      <p class="count">{{ data.total }} {{ data.total === 1 ? 'usuario' : 'usuarios' }}</p>
+    }
+  </div>
+  <a class="btn btn-success" routerLink="/panel/users/new"><app-icon name="plus" /> Nuevo usuario</a>
+</header>
+
+@if (flash(); as message) {
+  <p class="alert alert-success" role="status"><app-icon name="check" />{{ message }}</p>
+}
+@if (actionError(); as message) {
+  <p class="alert alert-error" role="alert"><app-icon name="alert" />{{ message }}</p>
+}
+
+<div class="search">
+  <app-icon name="search" />
+  <input type="search" class="input" [formControl]="search" placeholder="Buscar por nombre o correo" aria-label="Buscar usuarios" />
+</div>
+
+@if (loadError(); as message) {
+  <div class="alert alert-error" role="alert">
+    <app-icon name="alert" />
+    <span>{{ message }}</span>
+    <button type="button" class="btn btn-ghost retry" (click)="reload()">Reintentar</button>
+  </div>
+}
+
+@if (page(); as data) {
+  @if (data.items.length === 0) {
+    <section class="empty surface">
+      <app-icon name="users" />
+      <h2>Sin resultados</h2>
+      <p>No hay usuarios que coincidan con «{{ search.value.trim() }}».</p>
+    </section>
+  } @else {
+    <ul class="list surface" [attr.aria-busy]="loading()" [class.is-loading]="loading()">
+      <li class="row row-head" aria-hidden="true">
+        <span>Usuario</span>
+        <span>Rol y estado</span>
+        <span class="end">Acciones</span>
+      </li>
+      @for (user of data.items; track user.id) {
+        <li class="row">
+          <div class="person">
+            <span class="avatar" aria-hidden="true">{{ initialsOf(user.fullName) }}</span>
+            <div class="stack">
+              <strong>{{ user.fullName }}@if (isSelf(user)) { <span class="you">(tú)</span> }</strong>
+              <span class="muted">{{ user.email }}</span>
+            </div>
+          </div>
+          <div class="badges">
+            <span class="badge" [class.badge-admin]="user.role === 'ROLE_ADMIN'">{{ roleLabels[user.role] }}</span>
+            <span class="badge" [class.badge-ok]="user.active" [class.badge-off]="!user.active">
+              {{ user.active ? 'Activo' : 'Desactivado' }}
+            </span>
+          </div>
+          <div class="actions">
+            <a class="btn btn-ghost" [routerLink]="['/panel/users', user.id, 'edit']" [attr.aria-label]="'Editar a ' + user.fullName" title="Editar">
+              <app-icon name="edit" /><span class="txt">Editar</span>
+            </a>
+            <button type="button" class="btn btn-ghost" (click)="resetting.set(user)" [attr.aria-label]="'Restablecer la contraseña de ' + user.fullName" title="Restablecer contraseña">
+              <app-icon name="key" /><span class="txt">Clave</span>
+            </button>
+            @if (!isSelf(user)) {
+              <button
+                type="button"
+                class="btn btn-ghost"
+                (click)="toggleActive(user)"
+                [attr.aria-label]="(user.active ? 'Desactivar a ' : 'Activar a ') + user.fullName"
+                [title]="user.active ? 'Desactivar' : 'Activar'"
+              >
+                <app-icon name="power" /><span class="txt">{{ user.active ? 'Desactivar' : 'Activar' }}</span>
+              </button>
+              <button type="button" class="btn btn-ghost danger" (click)="askDelete(user)" [attr.aria-label]="'Eliminar a ' + user.fullName" title="Eliminar">
+                <app-icon name="trash" /><span class="txt">Eliminar</span>
+              </button>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+
+    @if (data.totalPages > 1) {
+      <nav class="pager" aria-label="Paginación">
+        <button type="button" class="btn btn-ghost" [disabled]="data.page <= 1" (click)="goToPage(data.page - 1)">
+          <app-icon name="chevron-left" /> Anterior
+        </button>
+        <span>Página {{ data.page }} de {{ data.totalPages }}</span>
+        <button type="button" class="btn btn-ghost" [disabled]="data.page >= data.totalPages" (click)="goToPage(data.page + 1)">
+          Siguiente <app-icon name="chevron-right" />
+        </button>
+      </nav>
+    }
+  }
+} @else if (loading()) {
+  <p class="loading" role="status">Cargando…</p>
+}
+
+<app-reset-password-dialog [user]="resetting()" (closed)="resetting.set(null)" (done)="passwordReset($event)" />
+
+<app-confirm-dialog
+  [open]="deleting() !== null"
+  heading="Eliminar usuario"
+  [message]="deleteMessage()"
+  [busy]="deleteBusy()"
+  [error]="deleteError()"
+  (confirmed)="confirmDelete()"
+  (cancelled)="cancelDelete()"
+/>

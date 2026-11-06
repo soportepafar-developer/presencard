@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Presencard\Domain\Presencard" table="presencards">
+        <unique-constraints>
+            <unique-constraint name="uniq_presencards_hash_id" columns="hash_id"/>
+        </unique-constraints>
+        <indexes>
+            <index name="idx_presencards_owner_id" columns="owner_id"/>
+        </indexes>
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <!-- utf8mb4_bin: los hashes distinguen mayúsculas de minúsculas (aB != ab) -->
+        <field name="hashId" type="string" column="hash_id" length="12">
+            <options>
+                <option name="collation">utf8mb4_bin</option>
+            </options>
+        </field>
+        <!-- Usuario responsable. Sin FK en BD: la integridad la garantiza la aplicación (ver DeleteUserHandler). -->
+        <field name="ownerId" type="integer" column="owner_id"/>
+        <field name="fullName" type="string" column="full_name" length="150"/>
+        <field name="jobTitle" type="string" column="job_title" length="150" nullable="true"/>
+        <field name="company" type="string" column="company" length="150" nullable="true"/>
+        <field name="email" type="string" column="email" length="180" nullable="true"/>
+        <field name="phone" type="string" column="phone" length="30" nullable="true"/>
+        <field name="whatsapp" type="string" column="whatsapp" length="15" nullable="true"/>
+        <field name="instagram" type="string" column="instagram" length="30" nullable="true"/>
+        <field name="telegram" type="string" column="telegram" length="32" nullable="true"/>
+        <field name="colorPrimary" type="string" column="color_primary" length="7" nullable="true"/>
+        <field name="colorAccent" type="string" column="color_accent" length="7" nullable="true"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+        <field name="updatedAt" type="datetime_immutable" column="updated_at"/>
+    </entity>
+</doctrine-mapping>

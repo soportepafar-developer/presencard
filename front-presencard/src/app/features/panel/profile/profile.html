@@ -1,0 +1,109 @@
+@if (user(); as me) {
+  <header class="hero surface">
+    <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+    <div class="who">
+      <h1>{{ me.fullName }}</h1>
+      <p class="email">{{ me.email }}</p>
+      <p class="meta">
+        <span class="badge" [class.badge-admin]="me.role === 'ROLE_ADMIN'">{{ roleLabel() }}</span>
+        <span class="badge badge-ok">Cuenta activa</span>
+      </p>
+    </div>
+  </header>
+
+  <div class="columns">
+    <section class="surface card" aria-labelledby="profile-title">
+      <h2 id="profile-title">Datos personales</h2>
+
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" novalidate>
+        @if (profileError(); as message) {
+          <p class="alert alert-error" role="alert"><app-icon name="alert" />{{ message }}</p>
+        }
+        @if (profileSaved()) {
+          <p class="alert alert-success" role="status"><app-icon name="check" />Tus datos se actualizaron.</p>
+        }
+
+        <div class="field">
+          <label for="fullName">Nombre completo</label>
+          <input id="fullName" class="input" formControlName="fullName" autocomplete="name" [class.is-invalid]="invalid(profileForm.controls.fullName)" />
+          @if (invalid(profileForm.controls.fullName)) {
+            <span class="field-error">Ingresa tu nombre (máx. 150 caracteres).</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="email">Correo electrónico</label>
+          <input id="email" type="email" class="input" formControlName="email" autocomplete="email" [class.is-invalid]="invalid(profileForm.controls.email)" />
+          @if (invalid(profileForm.controls.email)) {
+            <span class="field-error">Ingresa un correo válido.</span>
+          } @else {
+            <span class="hint">Es el correo con el que inicias sesión.</span>
+          }
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-success" [disabled]="profileSaving() || profileForm.pristine">
+            {{ profileSaving() ? 'Guardando…' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="surface card" aria-labelledby="password-title">
+      <h2 id="password-title">Cambiar contraseña</h2>
+
+      <form [formGroup]="passwordForm" (ngSubmit)="savePassword()" novalidate>
+        @if (passwordError(); as message) {
+          <p class="alert alert-error" role="alert"><app-icon name="alert" />{{ message }}</p>
+        }
+        @if (passwordSaved()) {
+          <p class="alert alert-success" role="status">
+            <app-icon name="check" />Contraseña actualizada. Se cerró tu sesión en otros dispositivos.
+          </p>
+        }
+
+        <app-password-field
+          inputId="currentPassword"
+          label="Contraseña actual"
+          autocomplete="current-password"
+          [control]="passwordForm.controls.currentPassword"
+          [invalid]="invalid(passwordForm.controls.currentPassword)"
+        >
+          @if (invalid(passwordForm.controls.currentPassword)) {
+            <span class="field-error">Ingresa tu contraseña actual.</span>
+          }
+        </app-password-field>
+
+        <app-password-field
+          inputId="newPassword"
+          label="Contraseña nueva"
+          [control]="passwordForm.controls.newPassword"
+          [invalid]="invalid(passwordForm.controls.newPassword)"
+        >
+          @if (invalid(passwordForm.controls.newPassword)) {
+            <span class="field-error">Debe tener entre 8 y 72 caracteres.</span>
+          } @else {
+            <span class="hint">Mínimo 8 caracteres.</span>
+          }
+        </app-password-field>
+
+        <app-password-field
+          inputId="confirmPassword"
+          label="Repite la contraseña nueva"
+          [control]="passwordForm.controls.confirmPassword"
+          [invalid]="mismatch() || invalid(passwordForm.controls.confirmPassword)"
+        >
+          @if (mismatch()) {
+            <span class="field-error">Las contraseñas no coinciden.</span>
+          }
+        </app-password-field>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary" [disabled]="passwordSaving()">
+            {{ passwordSaving() ? 'Guardando…' : 'Cambiar contraseña' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+}
